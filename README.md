@@ -11,7 +11,7 @@ Applicants are asked to review the project in this repository as a preparation t
 | :---------------- |
 | Timo Appenzeller  |
 
-# After the code review and refactor - code-refactoring
+# After the code review and refactor - code-refactoring branch
 In this code review I have tried to include **good practices** and **code refactoring for optimization**.
 
 On the one hand, I have updated the code in a way that I feel it may be more **self explanatory** when reading it, adding **comments** where I felt they could be **necessary**, also, for this task, I have added comments refering to what I have changed in the code compared to what it was before.
