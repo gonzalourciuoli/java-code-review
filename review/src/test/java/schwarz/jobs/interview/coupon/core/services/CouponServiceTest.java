@@ -36,10 +36,10 @@ public class CouponServiceTest {
     @Test
     public void createCoupon() {
         CouponDTO dto = CouponDTO.builder()
-            .code("12345")
-            .discount(BigDecimal.TEN)
-            .minBasketValue(BigDecimal.valueOf(50))
-            .build();
+                .code("12345")
+                .discount(BigDecimal.TEN)
+                .minBasketValue(BigDecimal.valueOf(50))
+                .build();
 
         couponService.createCoupon(dto);
 
@@ -50,14 +50,14 @@ public class CouponServiceTest {
     public void test_apply_coupon_method() {
 
         final Basket firstBasket = Basket.builder()
-            .value(BigDecimal.valueOf(100))
-            .build();
+                .value(BigDecimal.valueOf(100))
+                .build();
 
         when(couponRepository.findByCode("1111")).thenReturn(Optional.of(Coupon.builder()
-            .code("1111")
-            .discount(BigDecimal.TEN)
-            .minBasketValue(BigDecimal.valueOf(50))
-            .build()));
+                .code("1111")
+                .discount(BigDecimal.TEN)
+                .minBasketValue(BigDecimal.valueOf(50))
+                .build()));
 
         Optional<Basket> optionalBasket = couponService.apply(firstBasket, "1111");
 
@@ -67,8 +67,8 @@ public class CouponServiceTest {
         });
 
         final Basket secondBasket = Basket.builder()
-            .value(BigDecimal.valueOf(0))
-            .build();
+                .value(BigDecimal.valueOf(0))
+                .build();
 
         optionalBasket = couponService.apply(secondBasket, "1111");
 
@@ -78,33 +78,37 @@ public class CouponServiceTest {
         });
 
         final Basket thirdBasket = Basket.builder()
-            .value(BigDecimal.valueOf(-1))
-            .build();
+                .value(BigDecimal.valueOf(-1))
+                .build();
 
+        /*
+         * The test has been slightly changed in order to take into account the changes
+         * made in CouponService, where the exception type was changed.
+         */
         assertThatThrownBy(() -> {
             couponService.apply(thirdBasket, "1111");
-        }).isInstanceOf(RuntimeException.class)
-            .hasMessage("Can't apply negative discounts");
+        }).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Can't apply negative discounts.");
     }
 
     @Test
     public void should_test_get_Coupons() {
 
         CouponRequestDTO dto = CouponRequestDTO.builder()
-            .codes(Arrays.asList("1111", "1234"))
-            .build();
+                .codes(Arrays.asList("1111", "1234"))
+                .build();
 
         when(couponRepository.findByCode(any()))
-            .thenReturn(Optional.of(Coupon.builder()
-                .code("1111")
-                .discount(BigDecimal.TEN)
-                .minBasketValue(BigDecimal.valueOf(50))
-                .build()))
-            .thenReturn(Optional.of(Coupon.builder()
-                .code("1234")
-                .discount(BigDecimal.TEN)
-                .minBasketValue(BigDecimal.valueOf(50))
-                .build()));
+                .thenReturn(Optional.of(Coupon.builder()
+                        .code("1111")
+                        .discount(BigDecimal.TEN)
+                        .minBasketValue(BigDecimal.valueOf(50))
+                        .build()))
+                .thenReturn(Optional.of(Coupon.builder()
+                        .code("1234")
+                        .discount(BigDecimal.TEN)
+                        .minBasketValue(BigDecimal.valueOf(50))
+                        .build()));
 
         List<Coupon> returnedCoupons = couponService.getCoupons(dto);
 
